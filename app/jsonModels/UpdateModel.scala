@@ -8,14 +8,20 @@ object updateTimeJson {
     implicit def jsonReads = Json.reads[updateTimeJson]
 }
 
-case class updateStatusJson(code: String)
+case class updateStatusJson(code: String, statusCode: Int)
 object updateStatusJson {
     implicit def jsonWrites = Json.writes[updateStatusJson]
     implicit def jsonReads = Json.reads[updateStatusJson]
 }
 
-case class updateReturnJson(status: Int, message: String, unixTime: Int)
-object updateReturnJson {
-    implicit def jsonWrites = Json.writes[updateReturnJson]
-    implicit def jsonReads = Json.reads[updateReturnJson]
+case class updateTimeReturnJson(status: Int, message: String, unixTime: Int)
+object updateTimeReturnJson {
+    implicit def jsonWrites = Json.writes[updateTimeReturnJson]
+    implicit def jsonReads = Json.reads[updateTimeReturnJson]
+}
+
+case class updateStatusReturnJson(status: Int, message: String, statusCode: Int)
+object updateStatusReturnJson {
+    implicit def jsonWrites = Json.writes[updateStatusReturnJson]
+    implicit def jsonReads = Json.reads[updateStatusReturnJson]
 }

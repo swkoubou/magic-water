@@ -34,4 +34,11 @@ class WatersModel(db: Database) {
                 .on("Time" -> unixTime, "Id" -> id).executeInsert()
         }
     }
+
+    def updateStatus(id: String, statusCode: Int) = {
+        db.withTransaction{implicit connect =>
+            SQL("UPDATE `waters` SET `status` = {Status} WHERE `id` = {Id};")
+                .on("Status" -> statusCode, "Id" -> id).executeInsert()
+        }
+    }
 }
