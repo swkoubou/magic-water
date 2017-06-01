@@ -1,16 +1,26 @@
 package databaseModels
 
 import javax.inject._
+
 import play.api.db._
 import anorm._
 import anorm.SqlParser._
+import jsonModels.WaterData
 
+case class WaterDbData(id:String, status:Option[Int], time:Option[Int])
 @Singleton
 class WatersModel(db: Database) {
+    //Id用パーサー
 	val waterIdParser = str("id")
 	val waterIdMapper = waterIdParser.map { 
 		case id => Map("id" -> id)
 	}
+
+    //データ取得用パーサー
+    val waterDataParser = str("id") ~ get[Option[Int]]("status") ~ get[Option[Int]]("time")
+    val waterDataMapper = waterDataParser.map {
+        case id~status~time => WaterDbData(id, status, time)
+    }
 
 	def isExistId(id: String): Boolean = {
 		db.withConnection { implicit connect =>
@@ -39,6 +49,19 @@ class WatersModel(db: Database) {
         db.withTransaction{implicit connect =>
             SQL("UPDATE `waters` SET `status` = {Status} WHERE `id` = {Id};")
                 .on("Status" -> statusCode, "Id" -> id).executeInsert()
+        }
+    }
+
+    def getAll(): List[WaterData] = {
+        db.withConnection{implicit connect =>
+            val data = SQL("SELECT * FROM `waters` WHERE 1;").as(waterDataMapper.*)
+
+            var returnData:List[WaterData] = List[WaterData]()
+            for(value <- data){
+                returnData :+= new WaterData(value.id, value.status.getOrElse(-1), value.time.getOrElse(-1))
+            }
+
+            return returnData
         }
     }
 }
