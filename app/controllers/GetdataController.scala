@@ -24,4 +24,15 @@ class GetDataController @Inject()(db: Database) extends Controller {
 
         handle
     }
+
+    //get.jsonの処理
+    def get(id: String) = Action { implicit request =>
+        def handle: Result = {
+            val waterData = water.getFromId(id)
+            if(waterData == null) Ok(Json.toJson(new WaterData(null, -1, -1)))
+            else Ok(Json.toJson(waterData))
+        }
+
+        handle
+    }
 }
