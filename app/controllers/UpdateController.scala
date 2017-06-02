@@ -15,7 +15,7 @@ import play.api.mvc.{Action, Controller, Result}
 class UpdateController @Inject()(db: Database) extends Controller {
     val water: WatersModel = new WatersModel(db)
 
-    //updateTime.jsonの処理
+    //updateTimeの処理
     def updateTime() = Action { implicit request =>
         def handle: Result = {
             //Jsonかどうか
@@ -54,7 +54,7 @@ class UpdateController @Inject()(db: Database) extends Controller {
 
 
 
-    //updateStatus.jsonの処理
+    //updateStatusの処理
     def updateStatus() = Action { implicit request =>
         def handle: Result = {
             //Jsonかどうか

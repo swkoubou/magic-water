@@ -14,7 +14,7 @@ class AddController @Inject()(db: Database) extends Controller {
     val water: WatersModel = new WatersModel(db)
     val resultRequest: ResultCode = new ResultCode()
 
-    //add.jsonの処理
+    //addの処理
     def add() = Action { implicit request =>
         def handle: Result = {
             //Jsonかどうか

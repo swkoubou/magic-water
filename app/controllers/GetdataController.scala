@@ -15,7 +15,7 @@ import play.api.mvc.{Action, Controller}
 class GetDataController @Inject()(db: Database) extends Controller {
     val water: WatersModel = new WatersModel(db)
 
-    //getAll.jsonの処理
+    //getAllの処理
     def getAll() = Action { implicit request =>
         def handle: Result = {
             val waterData = water.getAll()
@@ -25,7 +25,7 @@ class GetDataController @Inject()(db: Database) extends Controller {
         handle
     }
 
-    //get.jsonの処理
+    //getの処理
     def get(id: String) = Action { implicit request =>
         def handle: Result = {
             val waterData = water.getFromId(id)
