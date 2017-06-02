@@ -25,3 +25,5 @@ server.pid
 .cache
 
 *.log
+
+/conf/deployPass.txt
