@@ -1,7 +1,8 @@
 # magic-water
 工房のマツキヨでスポーンする水を管理するやつ
 
-#導入方法
+# 導入方法
+
 1. Scalaをインストールします  
 	Macの場合  
 	
@@ -31,7 +32,7 @@
 	wget https://bitbucket.org/xerial/sqlite-jdbc/downloads/sqlite-jdbc-3.18.0.jar
 	```
 	
-#動かし方
+# 動かし方
 プロジェクトのディレクトリで
 
 ```a
