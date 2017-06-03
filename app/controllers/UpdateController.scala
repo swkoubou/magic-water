@@ -36,7 +36,7 @@ class UpdateController @Inject()(db: Database) extends Controller {
                         //codeが正しくPOSTされていた場合
                         if (water.isExistId(postJson.code)) {
                             water.updateTime(postJson.code, postJson.unixTime)
-                            Ok(Json.toJson(updateTimeReturnJson(400, "", postJson.unixTime)))
+                            Ok(Json.toJson(updateTimeReturnJson(100, "", postJson.unixTime)))
                         }else{
                             BadRequest(Json.toJson(updateTimeReturnJson(400, "登録されていないコードです。", -1)))
                         }
@@ -75,7 +75,7 @@ class UpdateController @Inject()(db: Database) extends Controller {
                         //codeが正しくPOSTされていた場合
                         if (water.isExistId(postJson.code)) {
                             water.updateStatus(postJson.code, postJson.statusCode)
-                            Ok(Json.toJson(updateStatusReturnJson(400, "", postJson.statusCode)))
+                            Ok(Json.toJson(updateStatusReturnJson(100, "", postJson.statusCode)))
                         }else{
                             BadRequest(Json.toJson(updateStatusReturnJson(400, "登録されていないコードです。", -1)))
                         }
