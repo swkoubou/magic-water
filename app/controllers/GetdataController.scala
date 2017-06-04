@@ -29,7 +29,7 @@ class GetDataController @Inject()(db: Database) extends Controller {
     def get(id: String) = Action { implicit request =>
         def handle: Result = {
             val waterData = water.getFromId(id)
-            if(waterData == null) Ok(Json.toJson(new WaterData(null, -1, -1)))
+            if(waterData == null) Ok(Json.toJson(new WaterData(null, null, -1, -1)))
             else Ok(Json.toJson(waterData))
         }
 

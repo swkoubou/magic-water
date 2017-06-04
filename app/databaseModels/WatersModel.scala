@@ -7,7 +7,7 @@ import anorm._
 import anorm.SqlParser._
 import jsonModels.WaterData
 
-case class WaterDbData(id:String, status:Option[Int], time:Option[Int])
+case class WaterDbData(id:String, name:String, status:Option[Int], time:Option[Int])
 @Singleton
 class WatersModel(db: Database) {
     //Id用パーサー
@@ -17,9 +17,9 @@ class WatersModel(db: Database) {
 	}
 
     //データ取得用パーサー
-    val waterDataParser = str("id") ~ get[Option[Int]]("status") ~ get[Option[Int]]("time")
+    val waterDataParser = str("id") ~ str("name") ~ get[Option[Int]]("status") ~ get[Option[Int]]("time")
     val waterDataMapper = waterDataParser.map {
-        case id~status~time => WaterDbData(id, status, time)
+        case id~name~status~time => WaterDbData(id, name, status, time)
     }
 
 	def isExistId(id: String): Boolean = {
@@ -31,10 +31,10 @@ class WatersModel(db: Database) {
 		}
 	}
 
-    def addId(id: String) = {
+    def addId(id: String, name: String) = {
         db.withTransaction{implicit connect =>
-            SQL("INSERT INTO `waters`(`id`, `status`) values({Id}, 0);")
-				.on("Id" -> id).executeInsert()
+            SQL("INSERT INTO `waters`(`id`, `name`, `status`) values({Id}, {Name}, 0);")
+				.on("Id" -> id, "Name" -> name).executeInsert()
         }
     }
 
@@ -59,7 +59,7 @@ class WatersModel(db: Database) {
 
             var returnData:List[WaterData] = List[WaterData]()
             for(value <- data){
-                returnData :+= new WaterData(value.id, value.status.getOrElse(-1), value.time.getOrElse(-1))
+                returnData :+= new WaterData(value.id, value.name, value.status.getOrElse(-1), value.time.getOrElse(-1))
             }
 
             return returnData
@@ -73,7 +73,7 @@ class WatersModel(db: Database) {
 
             var returnData:List[WaterData] = List[WaterData]()
             for(value <- data){
-                returnData :+= new WaterData(value.id, value.status.getOrElse(-1), value.time.getOrElse(-1))
+                returnData :+= new WaterData(value.id, value.name, value.status.getOrElse(-1), value.time.getOrElse(-1))
             }
 
             if(returnData.length < 1) return null
