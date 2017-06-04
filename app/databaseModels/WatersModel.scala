@@ -41,14 +41,14 @@ class WatersModel(db: Database) {
 	def updateTime(id: String, unixTime: Int) = {
         db.withTransaction{implicit connect =>
             SQL("UPDATE `waters` SET `time` = {Time} WHERE `id` = {Id};")
-                .on("Time" -> unixTime, "Id" -> id).executeInsert()
+                .on("Time" -> unixTime, "Id" -> id).executeUpdate()
         }
     }
 
     def updateStatus(id: String, statusCode: Int) = {
         db.withTransaction{implicit connect =>
             SQL("UPDATE `waters` SET `status` = {Status} WHERE `id` = {Id};")
-                .on("Status" -> statusCode, "Id" -> id).executeInsert()
+                .on("Status" -> statusCode, "Id" -> id).executeUpdate()
         }
     }
 
