@@ -113,8 +113,12 @@ class UpdateController @Inject()(db: Database) extends Controller {
                     if (postJson.code != "") {
                         //codeが正しくPOSTされていた場合
                         if (water.isExistId(postJson.code)) {
-                            water.updateName(postJson.code, postJson.name)
-                            Ok(Json.toJson(updateNameReturnJson(100, "", postJson.name))
+                            if(postJson.name != "") {
+                                water.updateName(postJson.code, postJson.name)
+                                Ok(Json.toJson(updateNameReturnJson(100, "", postJson.name)))
+                            }else{
+                                BadRequest(Json.toJson(updateNameReturnJson(405, "不正な名前です。", null)))
+                            }
                         }else{
                             BadRequest(Json.toJson(updateNameReturnJson(400, "登録されていないコードです。", null)))
                         }
