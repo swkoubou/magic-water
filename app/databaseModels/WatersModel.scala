@@ -52,6 +52,13 @@ class WatersModel(db: Database) {
         }
     }
 
+    def updateName(id: String, name: String) = {
+        db.withTransaction{implicit connect =>
+            SQL("UPDATE `waters` SET `name` = {Name} WHERE `id` = {Id};")
+                .on("Name" -> name, "Id" -> id).executeUpdate()
+        }
+    }
+
     def getAll(): List[WaterData] = {
         db.withConnection{implicit connect =>
             val data = SQL("SELECT * FROM `waters` WHERE 1;")

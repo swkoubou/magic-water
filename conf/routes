@@ -6,6 +6,7 @@
 POST     /add                  controllers.AddController.add
 POST     /updateTime           controllers.UpdateController.updateTime
 POST     /updateStatus         controllers.UpdateController.updateStatus
+POST     /updateName           controllers.UpdateController.updateName
 GET      /getAll               controllers.GetDataController.getAll
 GET      /get/:id              controllers.GetDataController.get(id: String)
 

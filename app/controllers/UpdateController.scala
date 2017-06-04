@@ -90,4 +90,43 @@ class UpdateController @Inject()(db: Database) extends Controller {
 
         handle
     }
+
+
+
+    //updateNameの処理
+    def updateName() = Action { implicit request =>
+        def handle: Result = {
+            //Jsonかどうか
+            request.body.asJson match {
+                case Some(postJsonRaw) => {
+                    var postJson: updateNameJson = null
+                    //入力データのパース・エラーチェック
+                    val isError: Boolean = try {
+                        postJson = Json.fromJson[updateNameJson](postJsonRaw).get
+                        false
+                    } catch {
+                        case _ => true
+                    }
+                    //エラーフラグ立っていればエラがーとして返す
+                    if (isError) return BadRequest(Json.toJson(updateNameReturnJson(400, "不正なリクエストです。", null)))
+
+                    if (postJson.code != "") {
+                        //codeが正しくPOSTされていた場合
+                        if (water.isExistId(postJson.code)) {
+                            water.updateName(postJson.code, postJson.name)
+                            Ok(Json.toJson(updateNameReturnJson(100, "", postJson.name))
+                        }else{
+                            BadRequest(Json.toJson(updateNameReturnJson(400, "登録されていないコードです。", null)))
+                        }
+                    } else {
+                        //codeが正しくPOSTされていなかった場合
+                        BadRequest(Json.toJson(updateNameReturnJson(400, "不正なリクエストです。", null)))
+                    }
+                }
+                case None => BadRequest(Json.toJson(updateNameReturnJson(400, "Unknown Request", null)))
+            }
+        }
+
+        handle
+    }
 }
