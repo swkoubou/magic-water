@@ -36,7 +36,7 @@ class UpdateController @Inject()(db: Database) extends Controller {
                         //codeが正しくPOSTされていた場合
                         if (water.isExistId(postJson.code)) {
                             water.updateTime(postJson.code, postJson.unixTime)
-                            Ok(Json.toJson(updateTimeReturnJson(400, "", postJson.unixTime)))
+                            Ok(Json.toJson(updateTimeReturnJson(100, "", postJson.unixTime)))
                         }else{
                             BadRequest(Json.toJson(updateTimeReturnJson(400, "登録されていないコードです。", -1)))
                         }
@@ -75,7 +75,7 @@ class UpdateController @Inject()(db: Database) extends Controller {
                         //codeが正しくPOSTされていた場合
                         if (water.isExistId(postJson.code)) {
                             water.updateStatus(postJson.code, postJson.statusCode)
-                            Ok(Json.toJson(updateStatusReturnJson(400, "", postJson.statusCode)))
+                            Ok(Json.toJson(updateStatusReturnJson(100, "", postJson.statusCode)))
                         }else{
                             BadRequest(Json.toJson(updateStatusReturnJson(400, "登録されていないコードです。", -1)))
                         }
@@ -85,6 +85,49 @@ class UpdateController @Inject()(db: Database) extends Controller {
                     }
                 }
                 case None => BadRequest(Json.toJson(updateStatusReturnJson(400, "Unknown Request", -1)))
+            }
+        }
+
+        handle
+    }
+
+
+
+    //updateNameの処理
+    def updateName() = Action { implicit request =>
+        def handle: Result = {
+            //Jsonかどうか
+            request.body.asJson match {
+                case Some(postJsonRaw) => {
+                    var postJson: updateNameJson = null
+                    //入力データのパース・エラーチェック
+                    val isError: Boolean = try {
+                        postJson = Json.fromJson[updateNameJson](postJsonRaw).get
+                        false
+                    } catch {
+                        case _ => true
+                    }
+                    //エラーフラグ立っていればエラがーとして返す
+                    if (isError) return BadRequest(Json.toJson(updateNameReturnJson(400, "不正なリクエストです。", null)))
+
+                    if (postJson.code != "") {
+                        //codeが正しくPOSTされていた場合
+                        if (water.isExistId(postJson.code)) {
+                            if(postJson.name != "") {
+                                water.updateName(postJson.code, postJson.name)
+                                Ok(Json.toJson(updateNameReturnJson(100, "", postJson.name)))
+                            }else{
+                                BadRequest(Json.toJson(updateNameReturnJson(405, "不正な名前です。", null)))
+                            }
+                        }else{
+                            BadRequest(Json.toJson(updateNameReturnJson(400, "登録されていないコードです。", null)))
+                        }
+                    } else {
+                        //codeが正しくPOSTされていなかった場合
+                        BadRequest(Json.toJson(updateNameReturnJson(400, "不正なリクエストです。", null)))
+                    }
+                }
+                case None => BadRequest(Json.toJson(updateNameReturnJson(400, "Unknown Request", null)))
             }
         }
 

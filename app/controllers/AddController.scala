@@ -34,7 +34,7 @@ class AddController @Inject()(db: Database) extends Controller {
                     if (postJson.code != "") {
                         //codeが正しくPOSTされていた場合
                         if (!water.isExistId(postJson.code)) {
-                            water.addId(postJson.code)
+                            water.addId(postJson.code, postJson.name)
                             Ok(Json.toJson(addReturnJson(100, "")))
                         } else BadRequest(Json.toJson(addReturnJson(401, "すでに登録されているコードです。")))
                     } else {
