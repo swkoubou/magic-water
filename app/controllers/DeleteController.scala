@@ -30,15 +30,22 @@ class DeleteController @Inject()(db: Database) extends Controller {
             case _ => true
           }
           //エラーフラグが立っていればエラーとして返す
-          if (isError) return BadRequest(Json.toJson(deleteJson(400, "不正なリクエストです。", -1)))
+          if (isError) return BadRequest(Json.toJson(deleteReturnJson(400, "不正なリクエストです。")))
 
           if (postJson.code != "") {
             //codeが正しくPOSTされていた場合
             if (water.isExistId(postJson.code)) {
-              water.
+              water.delete(postJson.code)
+              Ok(Json.toJson(deleteReturnJson(100, "success")))
+            } else {
+              BadRequest(Json.toJson(deleteReturnJson(400, "Unknown code")))
             }
+          } else {
+            //codeが正しくPOSTされていなかった場合
+            BadRequest(Json.toJson(deleteReturnJson(400, "不正なリクエストです。")))
           }
         }
+        case None => BadRequest(Json.toJson(deleteReturnJson(400, "Unknown Request")))
       }
     }
 

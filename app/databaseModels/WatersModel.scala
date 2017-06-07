@@ -59,6 +59,13 @@ class WatersModel(db: Database) {
         }
     }
 
+    def delete(id: String) = {
+        db.withTransaction{implicit connect =>
+          SQL("DELETE FROM `waters` WHERE `id` = {id};")
+            .on("id" -> id).executeQuery()
+        }
+    }
+
     def getAll(): List[WaterData] = {
         db.withConnection{implicit connect =>
             val data = SQL("SELECT * FROM `waters` WHERE 1;")
