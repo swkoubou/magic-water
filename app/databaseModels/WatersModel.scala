@@ -7,7 +7,7 @@ import anorm._
 import anorm.SqlParser._
 import jsonModels.WaterData
 
-case class WaterDbData(id:String, name:String, status:Option[Int], time:Option[Int])
+case class WaterDbData(id:String, name:String, status:Option[Int], time:Option[Int], category:Option[Int])
 @Singleton
 class WatersModel(db: Database) {
     //Id用パーサー
@@ -17,9 +17,9 @@ class WatersModel(db: Database) {
 	}
 
     //データ取得用パーサー
-    val waterDataParser = str("id") ~ str("name") ~ get[Option[Int]]("status") ~ get[Option[Int]]("time")
+    val waterDataParser = str("id") ~ str("name") ~ get[Option[Int]]("status") ~ get[Option[Int]]("time") ~ get[Option[Int]]("category")
     val waterDataMapper = waterDataParser.map {
-        case id~name~status~time => WaterDbData(id, name, status, time)
+        case id~name~status~time~category => WaterDbData(id, name, status, time, category)
     }
 
 	def isExistId(id: String): Boolean = {
@@ -66,7 +66,13 @@ class WatersModel(db: Database) {
 
             var returnData:List[WaterData] = List[WaterData]()
             for(value <- data){
-                returnData :+= new WaterData(value.id, value.name, value.status.getOrElse(-1), value.time.getOrElse(-1))
+                returnData :+= new WaterData(
+                    value.id,
+                    value.name,
+                    value.status.getOrElse(-1),
+                    value.time.getOrElse(-1),
+                    value.category.getOrElse(-1)
+                )
             }
 
             return returnData
@@ -80,7 +86,13 @@ class WatersModel(db: Database) {
 
             var returnData:List[WaterData] = List[WaterData]()
             for(value <- data){
-                returnData :+= new WaterData(value.id, value.name, value.status.getOrElse(-1), value.time.getOrElse(-1))
+                returnData :+= new WaterData(
+                    value.id,
+                    value.name,
+                    value.status.getOrElse(-1),
+                    value.time.getOrElse(-1),
+                    value.category.getOrElse(-1)
+                )
             }
 
             if(returnData.length < 1) return null
