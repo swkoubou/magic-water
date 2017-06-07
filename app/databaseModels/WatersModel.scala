@@ -31,10 +31,16 @@ class WatersModel(db: Database) {
 		}
 	}
 
-    def addId(id: String, name: String) = {
+    def addId(id: String, name: String, category: Option[Int]) = {
+        var categoryId = -1
+        category match {
+            case Some(categoryIdTemp) => categoryId = categoryIdTemp
+            case None => categoryId = -1
+        }
+
         db.withTransaction{implicit connect =>
-            SQL("INSERT INTO `waters`(`id`, `name`, `status`) values({Id}, {Name}, 0);")
-				.on("Id" -> id, "Name" -> name).executeInsert()
+            SQL("INSERT INTO `waters`(`id`, `name`, `status`, `category`) values({Id}, {Name}, 0, {Category});")
+				.on("Id" -> id, "Name" -> name, "Category" -> categoryId).executeInsert()
         }
     }
 
