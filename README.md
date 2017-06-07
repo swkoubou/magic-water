@@ -35,11 +35,16 @@
 # 動かし方
 プロジェクトのディレクトリで
 
-```a
-ctivator run
+```
+activator run "-Dconfig.file=conf/dev.conf"
 ```
 
-これでデバッグモードで動く
+これでデバッグモードで動く  
+デプロイモードで動かすには
+
+```
+activator run "-Dconfig.file=conf/prod.conf"
+```
 	
 	
 
