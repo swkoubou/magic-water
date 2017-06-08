@@ -68,7 +68,7 @@ class WatersModel(db: Database) {
     def delete(id: String) = {
         db.withTransaction{implicit connect =>
           SQL("DELETE FROM `waters` WHERE `id` = {id};")
-            .on("id" -> id).executeQuery()
+            .on("id" -> id).executeUpdate()
         }
     }
 
