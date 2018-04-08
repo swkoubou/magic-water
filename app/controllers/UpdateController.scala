@@ -133,4 +133,43 @@ class UpdateController @Inject()(db: Database) extends Controller {
 
         handle
     }
+
+
+
+    //updateCategoryの処理
+    def updateCategory() = Action { implicit request =>
+        def handle: Result = {
+            //Jsonかどうか
+            request.body.asJson match {
+                case Some(postJsonRaw) => {
+                    var postJson: updateCategoryJson = null
+                    //入力データのパース・エラーチェック
+                    val isError: Boolean = try {
+                        postJson = Json.fromJson[updateCategoryJson](postJsonRaw).get
+                        false
+                    } catch {
+                        case _ => true
+                    }
+                    //エラーフラグ立っていればエラがーとして返す
+                    if (isError) return BadRequest(Json.toJson(updateStatusReturnJson(400, "不正なリクエストです。", -1)))
+
+                    if (postJson.code != "") {
+                        //codeが正しくPOSTされていた場合
+                        if (water.isExistId(postJson.code)) {
+                            water.updateCategory(postJson.code, postJson.categoryCode)
+                            Ok(Json.toJson(updateStatusReturnJson(100, "", postJson.categoryCode)))
+                        }else{
+                            BadRequest(Json.toJson(updateStatusReturnJson(400, "登録されていないコードです。", -1)))
+                        }
+                    } else {
+                        //codeが正しくPOSTされていなかった場合
+                        BadRequest(Json.toJson(updateStatusReturnJson(400, "不正なリクエストです。", -1)))
+                    }
+                }
+                case None => BadRequest(Json.toJson(updateStatusReturnJson(400, "Unknown Request", -1)))
+            }
+        }
+
+        handle
+    }
 }

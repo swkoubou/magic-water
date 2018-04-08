@@ -7,6 +7,7 @@ POST     /add                  controllers.AddController.add
 POST     /updateTime           controllers.UpdateController.updateTime
 POST     /updateStatus         controllers.UpdateController.updateStatus
 POST     /updateName           controllers.UpdateController.updateName
+POST     /updateCategory       controllers.UpdateController.updateCategory
 GET      /getAll               controllers.GetDataController.getAll
 GET      /get/:id              controllers.GetDataController.get(id: String)
 POST     /delete               controllers.DeleteController.delete

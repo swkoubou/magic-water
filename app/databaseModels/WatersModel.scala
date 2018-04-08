@@ -65,6 +65,13 @@ class WatersModel(db: Database) {
         }
     }
 
+    def updateCategory(id: String, categoryCode: Int) = {
+        db.withTransaction{implicit connect =>
+            SQL("UPDATE `waters` SET `category` = {Category} WHERE `id` = {Id};")
+                .on("Category" -> categoryCode, "Id" -> id).executeUpdate()
+        }
+    }
+
     def delete(id: String) = {
         db.withTransaction{implicit connect =>
           SQL("DELETE FROM `waters` WHERE `id` = {id};")
